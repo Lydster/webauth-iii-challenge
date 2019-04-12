@@ -1,15 +1,17 @@
 import React from "react";
 import axios from "axios";
-class Login extends React.Component {
+
+class SignUp extends React.Component {
   state = {
-    username: "Sam",
-    password: "Surfer"
+    username: "",
+    password: "",
+    department: ""
   };
 
   render() {
     return (
       <div>
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.signUp}>
           <div>
             <label htmlFor="username" />
             <input
@@ -31,34 +33,40 @@ class Login extends React.Component {
             />
           </div>
           <div>
-            <button type="submit">Login</button>
+            <label htmlFor="department" />
+            <input
+              value={this.state.department}
+              onChange={this.handleInputChange}
+              id="department"
+              type="text"
+              placeholder="department"
+            />
+          </div>
+          <div>
+            <button type="submit">SignUp</button>
           </div>
         </form>
       </div>
     );
   }
-
-  handleSubmit = e => {
+  signUp = e => {
     e.preventDefault();
-    const endpoint = "http://localhost:5000/api/login";
+    const endpoint = "http://localhost:5000/api/register";
     axios
       .post(endpoint, this.state)
       .then(res => {
-        console.log("LOGIN RESPONSE", res.data);
+        console.log("SIGNUP RESPONSE", res.data);
 
-        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("token", res.data.password);
       })
       .catch(error => {
-        console.error("LOGIN ERROR", error);
+        console.error("SIGNUP ERROR", error);
       });
   };
-
   handleInputChange = e => {
     const { id, value } = e.target;
     this.setState({ [id]: value });
   };
 }
 
-export default Login;
-
-// form>((div>(label + input))*2)+(div>button[type="submit"])
+export default SignUp;
